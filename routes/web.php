@@ -20,5 +20,6 @@ Route::get('/', function () {
 Route::get('create', 'App\Http\Controllers\ShopController@create');
 Route::post('insert', 'App\Http\Controllers\ShopController@store')->name('store');
 Route::get('index', 'App\Http\Controllers\ShopController@index')->name('index');
+Route::get('show/{id}', 'App\Http\Controllers\ShopController@show')->name('showproduct');
 
 

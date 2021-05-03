@@ -27,9 +27,10 @@
                             <h3 class="card-subtitle mb-2 title">{{ $data->title }}</h3>
                             <p class="card-text">{{ $data->firstname }}</p>
                             <p class="card-text-1">{{ $data->surname }}</p>
+
                             <p class="card-text-2">${{ $data->price }}</p>
                             <p class="card-text-3">Number of Pages:{{ $data->pages }}</p>
-                            <button class="btn btn-dark"><a href="#" class="button-class">Select</a></button>
+                            <button class="btn btn-dark"><a href="{{route('showproduct',$data->id)}}" class="button-class">Select</a></button>
                         </div>
                     </div>
                 @endforeach
@@ -49,7 +50,7 @@
                             <p class="card-text-1">{{ $data->surname }}</p>
                             <p class="card-text-2">${{ $data->price }}</p>
                             <p class="card-text-3">Play Length:{{ $data->pages }}</p>
-                            <button class="btn btn-dark"><a href="#" class="button-class">Select</a></button>
+                            <button class="btn btn-dark"><a href="{{route('showproduct',$data->id)}}" class="button-class">Select</a></button>
                         </div>
                     </div>
 
@@ -84,6 +85,11 @@
                             <label for="firstname">first name</label>
                             <input type="text" class="form-control" name="firstname" id="firstname"
                                 placeholder="first name">
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{-- <label for="firstname">first name</label> --}}
+                            <input hidden type="text" class="form-control" name="id" id="id"
+                                placeholder="first name" value="{{uniqid()}}">
                         </div>
                     </div>
                     <div class="form-group">

@@ -51,7 +51,7 @@ class ShopController extends Controller
             // my data storage location is project_root/storage/app/data.json file.
             $contactInfo = Storage::disk('local')->exists('data.json') ? json_decode(Storage::disk('local')->get('data.json')) : [];
 
-            $inputData = $request->only(['producttype', 'title', 'firstname', 'surname', 'price', 'pages']);
+            $inputData = $request->only(['id', 'producttype', 'title', 'firstname', 'surname', 'price', 'pages']);
 
             // $inputData['datetime_submitted'] = date('Y-m-d H:i:s');
 
@@ -74,7 +74,14 @@ class ShopController extends Controller
      */
     public function show($id)
     {
-        //
+        $productdata = Storage::disk('local')->exists('data.json') ? json_decode(Storage::disk('local')->get('data.json')) : [];
+        $data = [];
+        foreach ($productdata as $d) {
+            if ($d->id == $id) {
+                array_push($data, $d);
+            }
+        }
+        return view('show', compact('data'));
     }
 
     /**
