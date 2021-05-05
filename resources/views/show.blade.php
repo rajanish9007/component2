@@ -28,9 +28,16 @@
                                 <div class="form-group col-md-12">
                                     <label for="producttype">product type</label>
                                     <select id="producttype" name="producttype" class="form-control">
-                                        {{-- <option selected>Choose...</option> --}}
+                                        @if ($d['producttype']=='book')
                                         <option>book</option>
                                         <option>cd</option>
+
+                                        @elseif($d['producttype']=='cd')
+                                        <option>cd</option>
+                                        <option>book</option>
+                                            
+                                        @endif
+                                        
 
                                     </select>
                                 </div>
