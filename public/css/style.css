@@ -43,6 +43,10 @@ a.button-class {
     /* float: left; */
 }
 
+a.a-tag {
+    text-decoration: none;
+}
+
 button {
     float: right;
 }

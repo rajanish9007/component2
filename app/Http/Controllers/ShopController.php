@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use Facade\FlareClient\Stacktrace\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,14 +16,16 @@ class ShopController extends Controller
      */
     public function index()
     {
-        $productdata = Storage::disk('local')->exists('data.json') ? json_decode(Storage::disk('local')->get('data.json')) : [];
-        // $bookdata = $productdata::where('producttype', 'book')->get();
+        $string = file_get_contents('data.json');
+        $productdata = json_decode($string, true);
+
         $bookdata = [];
         $cddata = [];
         foreach ($productdata as $data) {
-            if ($data->producttype == 'book') {
+            if ($data['producttype'] == 'book') {
                 array_push($bookdata, $data);
-            } elseif ($data->producttype == 'cd') {
+            } elseif ($data['producttype'] == 'cd') {
+
                 array_push($cddata, $data);
             }
         }
@@ -47,23 +50,42 @@ class ShopController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            // my data storage location is project_root/storage/app/data.json file.
-            $contactInfo = Storage::disk('local')->exists('data.json') ? json_decode(Storage::disk('local')->get('data.json')) : [];
+        $string = file_get_contents('data.json');
 
-            $inputData = $request->only(['id', 'producttype', 'title', 'firstname', 'surname', 'price', 'pages']);
+        $productdata = json_decode($string, true);
 
-            // $inputData['datetime_submitted'] = date('Y-m-d H:i:s');
+        $newProduct = [];
+        $newProduct['id'] = $request->id;
+        $newProduct['producttype'] = $request->producttype;
+        // $newProduct['type'] = $request->;
+        $newProduct['title'] = $request->title;
+        $newProduct['firstname'] = $request->firstname;
+        $newProduct['surname'] = $request->surname;
+        $newProduct['price'] = $request->price;
+        $newProduct['pages'] = $request->pages;
 
-            array_push($contactInfo, $inputData);
+        array_push($productdata, $newProduct);
 
-            Storage::disk('local')->put('data.json', json_encode($contactInfo));
+        $json = json_encode($productdata);
+        file_put_contents('data.json', $json);
+        return redirect('index');
+        // try {
+        //     // my data storage location is project_root/storage/app/data.json file.
+        //     $contactInfo = Storage::disk('local')->exists('data.json') ? json_decode(Storage::disk('local')->get('data.json')) : [];
 
-            return redirect('index');
-        } catch (Exception $e) {
+        //     $inputData = $request->only(['id', 'producttype', 'title', 'firstname', 'surname', 'price', 'pages']);
 
-            return ['error' => true, 'message' => $e->getMessage()];
-        }
+        //     // $inputData['datetime_submitted'] = date('Y-m-d H:i:s');
+
+        //     array_push($contactInfo, $inputData);
+
+        //     Storage::disk('local')->put('data.json', json_encode($contactInfo));
+
+        //     return redirect('index');
+        // } catch (Exception $e) {
+
+        //     return ['error' => true, 'message' => $e->getMessage()];
+        // }
     }
 
     /**
@@ -74,10 +96,11 @@ class ShopController extends Controller
      */
     public function show($id)
     {
-        $productdata = Storage::disk('local')->exists('data.json') ? json_decode(Storage::disk('local')->get('data.json')) : [];
+        $string = file_get_contents('data.json');
+        $productdata = json_decode($string, true);
         $data = [];
         foreach ($productdata as $d) {
-            if ($d->id == $id) {
+            if ($d['id'] == $id) {
                 array_push($data, $d);
             }
         }
@@ -104,7 +127,21 @@ class ShopController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $string = file_get_contents('data.json');
+        $productdata = json_decode($string, true);
+        $newdata = [];
+
+        foreach ($productdata as $d) {
+            if ($d['id'] == $id) {
+                $inputData = $request->only(['id', 'producttype', 'title', 'firstname', 'surname', 'price', 'pages']);
+                $d = $inputData;
+            }
+            array_push($newdata, $d);
+        }
+        $json = json_encode($newdata);
+        file_put_contents('data.json', $json);
+        return redirect('index');
     }
 
     /**
@@ -115,6 +152,17 @@ class ShopController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $string = file_get_contents('data.json');
+        $productdata = json_decode($string, true);
+        $newdata = [];
+
+        foreach ($productdata as $d) {
+            if ($d['id'] != $id) {
+                array_push($newdata, $d);
+            }
+        }
+        $json = json_encode($newdata);
+        file_put_contents('data.json', $json);
+        return redirect('index');
     }
 }
