@@ -57,7 +57,6 @@ class ShopController extends Controller
         $newProduct = [];
         $newProduct['id'] = $request->id;
         $newProduct['producttype'] = $request->producttype;
-        // $newProduct['type'] = $request->;
         $newProduct['title'] = $request->title;
         $newProduct['firstname'] = $request->firstname;
         $newProduct['surname'] = $request->surname;
@@ -69,23 +68,6 @@ class ShopController extends Controller
         $json = json_encode($productdata);
         file_put_contents('data.json', $json);
         return redirect('index');
-        // try {
-        //     // my data storage location is project_root/storage/app/data.json file.
-        //     $contactInfo = Storage::disk('local')->exists('data.json') ? json_decode(Storage::disk('local')->get('data.json')) : [];
-
-        //     $inputData = $request->only(['id', 'producttype', 'title', 'firstname', 'surname', 'price', 'pages']);
-
-        //     // $inputData['datetime_submitted'] = date('Y-m-d H:i:s');
-
-        //     array_push($contactInfo, $inputData);
-
-        //     Storage::disk('local')->put('data.json', json_encode($contactInfo));
-
-        //     return redirect('index');
-        // } catch (Exception $e) {
-
-        //     return ['error' => true, 'message' => $e->getMessage()];
-        // }
     }
 
     /**
